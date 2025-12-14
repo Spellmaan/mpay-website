@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercy Pay Token ($MPAY) | Official Vepay Utility</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        solana: '#9945FF',
+                        vepay: '#14F195',
+                        darkbg: '#0f172a',
+                        cardbg: '#1e293b',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-up': 'fadeInUp 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .glass-effect {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-white antialiased selection:bg-vepay selection:text-black">
+
+    <nav class="fixed w-full z-50 glass-effect border-b border-gray-800 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+            <div class="flex items-center gap-3 cursor-pointer group">
+                <img src="{{ asset('images/logo.png') }}" 
+                     alt="Logo MPay" 
+                     class="h-12 md:h-14 w-auto group-hover:rotate-12 transition transform duration-300 drop-shadow-[0_0_10px_rgba(20,241,149,0.3)]">
+    
+                     <span class="text-2xl md:text-3xl font-extrabold tracking-tighter text-white group-hover:text-gray-200 transition">
+                            Mercy<span class="text-vepay drop-shadow-md">Pay</span>
+                    </span>
+            </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#about" class="hover:text-vepay transition font-medium" data-i18n="menu_about">Tentang</a>
+                    <a href="#tokenomics" class="hover:text-vepay transition font-medium" data-i18n="menu_tokenomics">Tokenomics</a>
+                    <a href="#roadmap" class="hover:text-vepay transition font-medium" data-i18n="menu_roadmap">Roadmap</a>
+                    
+                    <div class="relative group">
+                        <button id="langBtn" onclick="toggleLangMenu()" class="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 border border-gray-600 px-4 py-2 rounded-full transition focus:outline-none focus:border-vepay">
+                            <img id="currentFlag" src="https://flagcdn.com/w40/id.png" alt="ID" class="w-5 h-auto rounded-sm shadow-sm">
+                            <span id="currentLangLabel" class="text-sm font-bold hidden md:block">ID</span>
+                            <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                    
+                        <div id="langMenu" class="hidden absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-xl shadow-2xl overflow-hidden z-50 animate-fade-in-up">
+                            <div onclick="selectLang('id', 'https://flagcdn.com/w40/id.png', 'ID')" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-700 cursor-pointer transition border-b border-gray-700/50">
+                                <img src="https://flagcdn.com/w40/id.png" class="w-6 rounded-sm">
+                                <span class="text-sm font-medium">Indonesia</span>
+                            </div>
+                            <div onclick="selectLang('en', 'https://flagcdn.com/w40/us.png', 'EN')" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-700 cursor-pointer transition border-b border-gray-700/50">
+                                <img src="https://flagcdn.com/w40/us.png" class="w-6 rounded-sm">
+                                <span class="text-sm font-medium">English (USA)</span>
+                            </div>
+                            <div onclick="selectLang('es', 'https://flagcdn.com/w40/es.png', 'ES')" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-700 cursor-pointer transition border-b border-gray-700/50">
+                                <img src="https://flagcdn.com/w40/es.png" class="w-6 rounded-sm">
+                                <span class="text-sm font-medium">Español</span>
+                            </div>
+                            <div onclick="selectLang('cn', 'https://flagcdn.com/w40/cn.png', 'CN')" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-700 cursor-pointer transition border-b border-gray-700/50">
+                                <img src="https://flagcdn.com/w40/cn.png" class="w-6 rounded-sm">
+                                <span class="text-sm font-medium">Chinese</span>
+                            </div>
+                            <div onclick="selectLang('ru', 'https://flagcdn.com/w40/ru.png', 'RU')" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-700 cursor-pointer transition">
+                                <img src="https://flagcdn.com/w40/ru.png" class="w-6 rounded-sm">
+                                <span class="text-sm font-medium">Russian</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://pump.fun" target="_blank" class="px-5 py-2 rounded-full bg-gradient-to-r from-vepay to-green-400 text-black font-bold shadow-lg shadow-vepay/20 hover:scale-105 transition transform" data-i18n="btn_buy_nav">
+                        Beli $MPAY
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden px-4">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-vepay/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-800/80 border border-gray-700 mb-8 animate-fade-in-up">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+    
+                <span class="text-sm font-medium text-gray-300" data-i18n="hero_badge">
+                    Masa Depan Pembayaran Digital
+                </span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
+                <span data-i18n="hero_title_1">Jembatan Pembayaran</span> <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-vepay via-green-400 to-solana animate-pulse-slow">Fiat & Crypto</span>
+            </h1>
+            
+            <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-400 leading-relaxed" data-i18n="hero_desc">
+                $MPAY adalah token utilitas resmi di jaringan Solana yang memberikan akses eksklusif ke layanan PayPal & Skrill. Nikmati <strong>Fee 0%</strong> dan <strong>Prioritas Transaksi</strong>.
+            </p>
+            
+            <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+                <a href="https://pump.fun" target="_blank" class="group relative px-8 py-4 bg-vepay text-black rounded-full font-bold text-lg overflow-hidden shadow-[0_0_20px_rgba(20,241,149,0.4)] hover:shadow-[0_0_30px_rgba(20,241,149,0.6)] transition-all">
+                    <span class="relative z-10 flex items-center gap-2">
+                        🚀 <span data-i18n="btn_buy_hero">Beli di Pump.fun</span>
+                    </span>
+                </a>
+                <a href="https://x.com/MercyPay_Token" target="_blank" class="px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white rounded-full font-bold text-lg border border-gray-700 transition flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <span data-i18n="btn_twitter">Follow Twitter (X)</span>
+                </a>
+            </div>
+
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+    
+                <div class="glass-effect p-4 rounded-xl flex flex-col items-center">
+                    <span class="text-xs text-gray-500 uppercase font-bold tracking-wider" data-i18n="ticker_price">HARGA LIVE</span>
+                    <div class="mt-1 flex items-center">
+                        <span id="livePrice" class="text-xl font-bold text-vepay">$0.0000</span>
+            
+                        <span id="priceChange" class="text-xs bg-gray-700 text-gray-300 px-2 py-0.5 rounded ml-2">0.00%</span>
+                    </div>
+                </div>
+
+                <div class="glass-effect p-4 rounded-xl flex flex-col items-center">
+                    <span class="text-xs text-gray-500 uppercase font-bold tracking-wider" data-i18n="ticker_mcap">MARKET CAP</span>
+                    <span id="marketCap" class="text-xl font-bold text-white mt-1">$0</span>
+                </div>
+
+                <div class="glass-effect p-4 rounded-xl flex flex-col items-center">
+                    <span class="text-xs text-gray-500 uppercase font-bold tracking-wider">NETWORK</span>
+                    <span class="text-xl font-bold text-solana mt-1">SOLANA</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="py-20 bg-gray-900 relative">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h4 class="text-vepay font-bold tracking-wider text-sm mb-2" data-i18n="about_subtitle">LATAR BELAKANG</h4>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6" data-i18n="about_title">Mengapa $MPAY Diciptakan?</h2>
+                <p class="text-gray-400 mb-6 leading-relaxed" data-i18n="about_desc">
+                    Dunia pembayaran digital saat ini tidak efisien. Pengguna yang ingin menukar Kripto menjadi saldo Fiat (PayPal/USD) seringkali dirugikan oleh biaya tinggi, proses lambat, dan kurs yang buruk.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-red-900/50 flex items-center justify-center text-red-500">✕</div>
+                        <span class="text-gray-300" data-i18n="problem_1">Biaya Admin Tinggi (10-15%)</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-red-900/50 flex items-center justify-center text-red-500">✕</div>
+                        <span class="text-gray-300" data-i18n="problem_2">Proses Pencairan Lambat</span>
+                    </div>
+                    <div class="p-4 bg-vepay/10 border border-vepay/20 rounded-lg mt-6">
+                        <p class="text-sm text-vepay font-medium" data-i18n="solution_text">
+                            Solusi: Kami menciptakan $MPAY sebagai kunci akses layanan murah & cepat.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-cardbg p-8 rounded-3xl border border-gray-700 shadow-2xl relative overflow-hidden group hover:border-vepay/50 transition duration-500">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-solana/20 blur-[60px] rounded-full"></div>
+                
+                <h3 class="text-2xl font-bold mb-2 flex items-center gap-2">
+                    💎 <span data-i18n="protocol_title">The Mercy Protocol</span>
+                </h3>
+                <p class="text-gray-400 text-sm mb-6" data-i18n="protocol_desc">
+                    $MPAY adalah "Tiket Keanggotaan Digital" untuk fitur premium.
+                </p>
+                
+                <div class="space-y-6">
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center text-2xl shadow-inner">⚡</div>
+                        <div>
+                            <h4 class="font-bold text-white" data-i18n="util_1_title">Jalur Prioritas</h4>
+                            <p class="text-xs text-gray-500" data-i18n="util_1_desc">Transaksi diproses instan oleh Balance Executor.</p>
+                        </div>
+                    </div>
+                      <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center text-2xl shadow-inner">💸</div>
+                        <div>
+                            <h4 class="font-bold text-white" data-i18n="util_2_title">Bebas Biaya Admin</h4>
+                            <p class="text-xs text-gray-500" data-i18n="util_2_desc">Diskon fee hingga 100% untuk Top Holders.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tokenomics" class="py-20 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4" data-i18n="token_title">Tokenomics Transparan</h2>
+            <p class="text-gray-400 mb-12" data-i18n="token_subtitle">Struktur token yang dirancang untuk stabilitas jangka panjang.</p>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-cardbg p-6 rounded-2xl border border-gray-700 hover:-translate-y-2 transition duration-300">
+                    <div class="text-4xl mb-4">💰</div>
+                    <h3 class="text-lg font-bold text-gray-300" data-i18n="tok_supply">Total Supply</h3>
+                    <div class="text-2xl font-bold text-vepay my-2">1 Miliar</div>
+                    <p class="text-xs text-gray-500" data-i18n="tok_supply_desc">Fixed Supply. Tidak ada pencetakan ulang.</p>
+                </div>
+                <div class="bg-cardbg p-6 rounded-2xl border border-gray-700 hover:-translate-y-2 transition duration-300">
+                    <div class="text-4xl mb-4">🔥</div>
+                    <h3 class="text-lg font-bold text-gray-300" data-i18n="tok_liq">Likuiditas</h3>
+                    <div class="text-2xl font-bold text-green-400 my-2">100% Burned</div>
+                    <p class="text-xs text-gray-500" data-i18n="tok_liq_desc">LP dibakar permanen. Aman dari Rug-pull.</p>
+                </div>
+                <div class="bg-cardbg p-6 rounded-2xl border border-gray-700 hover:-translate-y-2 transition duration-300">
+                    <div class="text-4xl mb-4">🛡️</div>
+                    <h3 class="text-lg font-bold text-gray-300" data-i18n="tok_tax">Pajak (Tax)</h3>
+                    <div class="text-2xl font-bold text-blue-400 my-2">0% / 0%</div>
+                    <p class="text-xs text-gray-500" data-i18n="tok_tax_desc">Bebas pajak transaksi. Murni utilitas.</p>
+                </div>
+            </div>
+
+            <div class="mt-12 bg-black/50 p-6 rounded-xl border border-dashed border-gray-600 inline-block max-w-2xl w-full">
+                <p class="text-xs text-gray-500 font-bold mb-2" data-i18n="ca_label">CONTRACT ADDRESS (CA):</p>
+                <code class="block bg-black p-3 rounded text-vepay font-mono text-sm break-all cursor-pointer hover:bg-gray-900 transition" onclick="alert('CA akan tersedia saat Launching!')">
+                    8sF3...[MENUNGGU_PELUNCURAN]...kL9
+                </code>
+                <p class="text-xs text-gray-600 mt-2 italic" data-i18n="ca_note">*Hanya salin kontrak dari sumber resmi ini.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="py-20 bg-gray-900">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center" data-i18n="roadmap_title">Peta Jalan (Roadmap)</h2>
+            
+            <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-vepay before:to-transparent">
+                
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-gray-900 bg-vepay shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 shadow-[0_0_15px_rgba(20,241,149,0.5)]">
+                        <span class="text-black font-bold text-xs">Q4</span>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-cardbg p-6 rounded-xl border border-vepay/30 shadow-lg">
+                        <div class="text-vepay text-xs font-bold mb-1" data-i18n="phase1_tag">Q4 2025 (Sekarang)</div>
+                        <h4 class="text-xl font-bold text-white mb-3" data-i18n="phase1_title">Fase 1: Inisiasi</h4>
+                        <ul class="text-gray-400 text-sm space-y-2">
+                            <li>✅ <span data-i18n="p1_1">Perancangan Konsep & Whitepaper</span></li>
+                            <li>✅ <span data-i18n="p1_2">Pengembangan Website Resmi</span></li>
+                            <li>🔄 <span data-i18n="p1_3">Fair Launch di Pump.fun</span></li>
+                            <li>🔄 <span data-i18n="p1_4">Pembentukan Komunitas Twitter</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-gray-900 bg-gray-700 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <span class="text-white font-bold text-xs">Q1</span>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-cardbg p-6 rounded-xl border border-gray-700 shadow-lg">
+                        <div class="text-gray-500 text-xs font-bold mb-1" data-i18n="phase2_tag">Q1 2026</div>
+                        <h4 class="text-xl font-bold text-white mb-3" data-i18n="phase2_title">Fase 2: Utilitas</h4>
+                        <ul class="text-gray-400 text-sm space-y-2">
+                            <li>⬜ <span data-i18n="p2_1">Integrasi "Mercy Privilege"</span></li>
+                            <li>⬜ <span data-i18n="p2_2">Diskon Fee untuk Holder</span></li>
+                            <li>⬜ <span data-i18n="p2_3">Listing di Raydium (DEX)</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-gray-900 bg-gray-700 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <span class="text-white font-bold text-xs">Q2</span>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-cardbg p-6 rounded-xl border border-gray-700 shadow-lg">
+                        <div class="text-gray-500 text-xs font-bold mb-1" data-i18n="phase3_tag">Q2 2026</div>
+                        <h4 class="text-xl font-bold text-white mb-3" data-i18n="phase3_title">Fase 3: Ekspansi</h4>
+                        <ul class="text-gray-400 text-sm space-y-2">
+                            <li>⬜ <span data-i18n="p3_1">Kampanye Marketing Global</span></li>
+                            <li>⬜ <span data-i18n="p3_2">Listing CoinGecko & CMC</span></li>
+                            <li>⬜ <span data-i18n="p3_3">Target 10.000 Holder</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black border-t border-gray-800 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="mb-6">
+                <span class="text-3xl font-bold tracking-tighter text-white">Mercy<span class="text-vepay">Pay</span></span>
+                <p class="text-gray-500 mt-2" data-i18n="footer_slogan">Solusi pembayaran Blockchain x Fiat.</p>
+            </div>
+            
+            <div class="flex justify-center gap-6 mb-8 text-sm font-medium text-gray-400">
+                <a href="https://x.com/MercyPay_Token" target="_blank" class="hover:text-white transition">Twitter (X)</a>
+                <a href="https://t.me/MercyPayToken" target="_blank" class="hover:text-white transition">Telegram</a>
+                <a href="https://pump.fun" target="_blank" class="hover:text-white transition">Pump.fun</a>
+            </div>
+
+            <div class="border-t border-gray-900 pt-8">
+                <p class="text-gray-600 text-sm mb-2" data-i18n="footer_copy">
+                    &copy; 2025 Mercy Pay Token.
+                </p>
+
+            <p class="text-gray-700 text-xs max-w-2xl mx-auto" data-i18n="footer_disclaimer">
+                Perdagangan aset kripto memiliki risiko tinggi. Lakukan riset mandiri (DYOR). Token ini adalah utilitas untuk ekosistem Vepay.
+            </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- LOGIKA DROPDOWN BAHASA ---
+        function toggleLangMenu() {
+            const menu = document.getElementById('langMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function selectLang(lang, flagUrl, label) {
+            // Update Tombol Utama
+            document.getElementById('currentFlag').src = flagUrl;
+            document.getElementById('currentLangLabel').innerText = label;
+            
+            // Sembunyikan Menu
+            document.getElementById('langMenu').classList.add('hidden');
+            
+            // Panggil Fungsi Terjemahan
+            changeLanguage(lang);
+        }
+
+        // Tutup menu jika klik di luar
+        window.onclick = function(event) {
+            if (!event.target.closest('#langBtn') && !event.target.closest('#langMenu')) {
+                document.getElementById('langMenu').classList.add('hidden');
+            }
+        }
+
+        // --- KAMUS 5 BAHASA (SUDAH DIPERBAIKI: SLOGAN BARU & FOOTER BERSIH) ---
+    const translations = {
+        id: {
+            menu_about: "Tentang", menu_tokenomics: "Tokenomics", menu_roadmap: "Roadmap",
+            btn_buy_nav: "Beli $MPAY",
+            
+            // BAGIAN INI DIPERBARUI (SLOGAN)
+            hero_badge: "Masa Depan Pembayaran Digital",
+            
+            hero_title_1: "Jembatan Pembayaran",
+            hero_desc: "$MPAY adalah token utilitas resmi di jaringan Solana yang memberikan akses eksklusif ke layanan PayPal & Skrill. Nikmati Fee 0% dan Prioritas Transaksi.",
+            btn_buy_hero: "Beli di Pump.fun", btn_twitter: "Ikuti Twitter (X)",
+            ticker_price: "HARGA LIVE", ticker_mcap: "KAPITALISASI PASAR",
+            about_subtitle: "LATAR BELAKANG", about_title: "Mengapa $MPAY Diciptakan?",
+            about_desc: "Dunia pembayaran digital saat ini tidak efisien. Pengguna yang ingin menukar Kripto menjadi saldo Fiat (PayPal/USD) seringkali dirugikan oleh biaya tinggi dan proses lambat.",
+            problem_1: "Biaya Admin Tinggi (10-15%)", problem_2: "Proses Pencairan Lambat",
+            solution_text: "Solusi: Kami menciptakan $MPAY sebagai kunci akses layanan murah & cepat.",
+            protocol_title: "The Mercy Protocol", protocol_desc: "$MPAY adalah 'Tiket Keanggotaan Digital' untuk fitur premium.",
+            util_1_title: "Jalur Prioritas", util_1_desc: "Transaksi diproses instan oleh Balance Executor.",
+            util_2_title: "Bebas Biaya Admin", util_2_desc: "Diskon fee hingga 100% untuk Top Holders.",
+            token_title: "Tokenomics Transparan", token_subtitle: "Struktur token yang dirancang untuk stabilitas jangka panjang.",
+            tok_supply: "Total Pasokan", tok_supply_desc: "1 Miliar Token. Fixed Supply.",
+            tok_liq: "Likuiditas", tok_liq_desc: "100% Dibakar (Burned). Anti Rug-pull.",
+            tok_tax: "Pajak", tok_tax_desc: "Bebas pajak transaksi. Murni utilitas.",
+            ca_label: "ALAMAT KONTRAK (CA):", ca_note: "*Hanya salin kontrak dari sumber resmi ini.",
+            roadmap_title: "Peta Jalan (Roadmap)",
+            phase1_tag: "Q4 2025 (Sekarang)", phase1_title: "Fase 1: Inisiasi",
+            p1_1: "Perancangan Konsep & Whitepaper", p1_2: "Pengembangan Website Resmi",
+            p1_3: "Fair Launch di Pump.fun", p1_4: "Pembentukan Komunitas Twitter",
+            phase2_tag: "Q1 2026", phase2_title: "Fase 2: Utilitas",
+            p2_1: "Integrasi 'Mercy Privilege'", p2_2: "Diskon Fee untuk Holder", p2_3: "Listing di Raydium (DEX)",
+            phase3_tag: "Q2 2026", phase3_title: "Fase 3: Ekspansi",
+            p3_1: "Kampanye Marketing Global", p3_2: "Listing CoinGecko & CMC", p3_3: "Target 10.000 Holder",
+            footer_slogan: "Solusi pembayaran Blockchain x Fiat.",
+            
+            // BAGIAN INI DIPERBARUI (HAPUS PT VEPAY)
+            footer_copy: "&copy; 2025 Mercy Pay Token.",
+            
+            footer_disclaimer: "Perdagangan aset kripto memiliki risiko tinggi. Lakukan riset mandiri (DYOR)."
+        },
+        en: {
+            menu_about: "About", menu_tokenomics: "Tokenomics", menu_roadmap: "Roadmap",
+            btn_buy_nav: "Buy $MPAY",
+            
+            // UPDATED SLOGAN
+            hero_badge: "The Future of Digital Payments",
+            
+            hero_title_1: "Payment Bridge",
+            hero_desc: "$MPAY is the official utility token on Solana network providing exclusive access to PayPal & Skrill services. Enjoy 0% Fees and Priority Transactions.",
+            btn_buy_hero: "Buy on Pump.fun", btn_twitter: "Follow Twitter (X)",
+            ticker_price: "LIVE PRICE", ticker_mcap: "MARKET CAP",
+            about_subtitle: "BACKGROUND", about_title: "Why was $MPAY Created?",
+            about_desc: "The digital payment world is inefficient. Users wanting to swap Crypto to Fiat (PayPal/USD) suffer from high fees and slow processes.",
+            problem_1: "High Admin Fees (10-15%)", problem_2: "Slow Withdrawal Process",
+            solution_text: "Solution: We created $MPAY as a key for cheap & fast services.",
+            protocol_title: "The Mercy Protocol", protocol_desc: "$MPAY is a 'Digital Membership Ticket' for premium features.",
+            util_1_title: "Priority Lane", util_1_desc: "Transactions processed instantly by Balance Executors.",
+            util_2_title: "Zero Admin Fees", util_2_desc: "Up to 100% fee discount for Top Holders.",
+            token_title: "Transparent Tokenomics", token_subtitle: "Token structure designed for long-term stability.",
+            tok_supply: "Total Supply", tok_supply_desc: "1 Billion Tokens. Fixed Supply.",
+            tok_liq: "Liquidity", tok_liq_desc: "100% Burned. Rug-pull proof.",
+            tok_tax: "Tax", tok_tax_desc: "Zero transaction tax. Pure utility.",
+            ca_label: "CONTRACT ADDRESS (CA):", ca_note: "*Only copy contract from this official source.",
+            roadmap_title: "Roadmap",
+            phase1_tag: "Q4 2025 (Now)", phase1_title: "Phase 1: Initiation",
+            p1_1: "Concept Creation & Whitepaper", p1_2: "Official Website Development",
+            p1_3: "Fair Launch on Pump.fun", p1_4: "Twitter Community Building",
+            phase2_tag: "Q1 2026", phase2_title: "Phase 2: Utility",
+            p2_1: "'Mercy Privilege' Integration", p2_2: "Fee Discounts for Holders", p2_3: "Raydium Listing (DEX)",
+            phase3_tag: "Q2 2026", phase3_title: "Phase 3: Expansion",
+            p3_1: "Global Marketing Campaign", p3_2: "CoinGecko & CMC Listing", p3_3: "Target 10,000 Holders",
+            footer_slogan: "Blockchain x Fiat Payment Solution.",
+            
+            // UPDATED FOOTER
+            footer_copy: "&copy; 2025 Mercy Pay Token.",
+            
+            footer_disclaimer: "Crypto trading involves high risk. Do your own research (DYOR)."
+        },
+        es: {
+            menu_about: "Sobre", menu_tokenomics: "Tokenomics", menu_roadmap: "Mapa Vial",
+            btn_buy_nav: "Comprar $MPAY",
+            
+            // UPDATED SLOGAN
+            hero_badge: "El Futuro de los Pagos Digitales",
+            
+            hero_title_1: "Puente de Pagos",
+            hero_desc: "$MPAY es el token oficial en Solana que brinda acceso exclusivo a servicios PayPal y Skrill. Disfrute 0% de Comisión y Transacciones Prioritarias.",
+            btn_buy_hero: "Comprar en Pump.fun", btn_twitter: "Seguir en Twitter",
+            ticker_price: "PRECIO EN VIVO", ticker_mcap: "CAP DE MERCADO",
+            about_subtitle: "FONDO", about_title: "¿Por qué se creó $MPAY?",
+            about_desc: "El mundo de pagos digitales es ineficiente. Los usuarios sufren altas tarifas y procesos lentos al cambiar Cripto a Fiat.",
+            problem_1: "Altas Comisiones (10-15%)", problem_2: "Proceso de Retiro Lento",
+            solution_text: "Solución: Creamos $MPAY como llave para servicios baratos y rápidos.",
+            protocol_title: "El Protocolo Mercy", protocol_desc: "$MPAY es un 'Boleto de Membresía Digital'.",
+            util_1_title: "Carril Prioritario", util_1_desc: "Transacciones procesadas instantáneamente.",
+            util_2_title: "Cero Comisiones", util_2_desc: "Hasta 100% de descuento para Top Holders.",
+            token_title: "Tokenomics Transparente", token_subtitle: "Estructura diseñada para estabilidad.",
+            tok_supply: "Suministro Total", tok_supply_desc: "1 Billón. Suministro Fijo.",
+            tok_liq: "Liquidez", tok_liq_desc: "100% Quemada. A prueba de estafas.",
+            tok_tax: "Impuesto", tok_tax_desc: "Cero impuestos. Pura utilidad.",
+            ca_label: "DIRECCIÓN DE CONTRATO:", ca_note: "*Copie solo de esta fuente oficial.",
+            roadmap_title: "Mapa Vial",
+            phase1_tag: "Q4 2025 (Ahora)", phase1_title: "Fase 1: Iniciación",
+            p1_1: "Creación de Concepto", p1_2: "Desarrollo Web Oficial",
+            p1_3: "Lanzamiento en Pump.fun", p1_4: "Comunidad en Twitter",
+            phase2_tag: "Q1 2026", phase2_title: "Fase 2: Utilidad",
+            p2_1: "Integración 'Mercy Privilege'", p2_2: "Descuentos para Holders", p2_3: "Listado en Raydium",
+            phase3_tag: "Q2 2026", phase3_title: "Fase 3: Expansión",
+            p3_1: "Marketing Global", p3_2: "CoinGecko & CMC", p3_3: "Objetivo 10,000 Holders",
+            footer_slogan: "Solución de Pagos Blockchain x Fiat.",
+            
+            // UPDATED FOOTER
+            footer_copy: "&copy; 2025 Mercy Pay Token.",
+            
+            footer_disclaimer: "El comercio de cripto conlleva alto riesgo. DYOR."
+        },
+        cn: {
+            menu_about: "关于", menu_tokenomics: "代币经济", menu_roadmap: "路线图",
+            btn_buy_nav: "购买 $MPAY",
+            
+            // UPDATED SLOGAN
+            hero_badge: "数字支付的未来",
+            
+            hero_title_1: "支付桥梁",
+            hero_desc: "$MPAY 是 Solana 网络上的官方实用代币，提供 PayPal 和 Skrill 服务的独家访问权。享受 0% 费用和优先交易。",
+            btn_buy_hero: "在 Pump.fun 购买", btn_twitter: "关注 Twitter",
+            ticker_price: "实时价格", ticker_mcap: "市值",
+            about_subtitle: "背景", about_title: "为什么创建 $MPAY？",
+            about_desc: "数字支付世界效率低下。用户在将加密货币兑换为法币时遭受高额费用和缓慢流程的困扰。",
+            problem_1: "高额管理费 (10-15%)", problem_2: "提现流程缓慢",
+            solution_text: "解决方案：我们创建 $MPAY 作为廉价快速服务的关键。",
+            protocol_title: "Mercy 协议", protocol_desc: "$MPAY 是高级功能的“数字会员票”。",
+            util_1_title: "优先通道", util_1_desc: "交易由余额执行人即时处理。",
+            util_2_title: "零管理费", util_2_desc: "顶级持有者享受高达 100% 的费用折扣。",
+            token_title: "透明代币经济", token_subtitle: "旨在长期稳定的代币结构。",
+            tok_supply: "总供应量", tok_supply_desc: "10 亿代币。固定供应。",
+            tok_liq: "流动性", tok_liq_desc: "100% 销毁。防跑路。",
+            tok_tax: "税收", tok_tax_desc: "零交易税。纯实用。",
+            ca_label: "合约地址 (CA):", ca_note: "*仅从官方来源复制。",
+            roadmap_title: "路线图",
+            phase1_tag: "2025 Q4 (现在)", phase1_title: "第一阶段：启动",
+            p1_1: "概念创作与白皮书", p1_2: "官方网站开发",
+            p1_3: "Pump.fun 公平发布", p1_4: "Twitter 社区建设",
+            phase2_tag: "2026 Q1", phase2_title: "第二阶段：实用性",
+            p2_1: "'Mercy Privilege' 集成", p2_2: "持有者费用折扣", p2_3: "Raydium 上市",
+            phase3_tag: "2026 Q2", phase3_title: "第三阶段：扩张",
+            p3_1: "全球营销活动", p3_2: "CoinGecko & CMC 上市", p3_3: "目标 10,000 持有者",
+            footer_slogan: "区块链 x 法币支付解决方案。",
+            
+            // UPDATED FOOTER
+            footer_copy: "&copy; 2025 Mercy Pay Token.",
+            
+            footer_disclaimer: "加密货币交易风险极高。请自行研究 (DYOR)。"
+        },
+        ru: {
+            menu_about: "О нас", menu_tokenomics: "Токеномика", menu_roadmap: "План",
+            btn_buy_nav: "Купить $MPAY",
+            
+            // UPDATED SLOGAN
+            hero_badge: "Будущее Цифровых Платежей",
+            
+            hero_title_1: "Платежный Мост",
+            hero_desc: "$MPAY — официальный токен на Solana, дающий доступ к сервисам PayPal и Skrill. Наслаждайтесь 0% комиссией и приоритетом.",
+            btn_buy_hero: "Купить на Pump.fun", btn_twitter: "Twitter (X)",
+            ticker_price: "ЦЕНА LIVE", ticker_mcap: "РЫН. КАПИТАЛИЗАЦИЯ",
+            about_subtitle: "ФОН", about_title: "Зачем создан $MPAY?",
+            about_desc: "Мир цифровых платежей неэффективен. Пользователи теряют деньги на комиссиях при обмене крипты на фиат.",
+            problem_1: "Высокие комиссии (10-15%)", problem_2: "Медленный вывод",
+            solution_text: "Решение: Мы создали $MPAY как ключ к дешевым услугам.",
+            protocol_title: "Протокол Mercy", protocol_desc: "$MPAY — это «Цифровой билет» для премиум функций.",
+            util_1_title: "Приоритет", util_1_desc: "Мгновенная обработка транзакций.",
+            util_2_title: "Ноль комиссий", util_2_desc: "Скидка до 100% для топ-холдеров.",
+            token_title: "Прозрачная Токеномика", token_subtitle: "Структура для долгосрочной стабильности.",
+            tok_supply: "Общее предложение", tok_supply_desc: "1 Миллиард. Фиксировано.",
+            tok_liq: "Ликвидность", tok_liq_desc: "100% Сожжена. Защита от скама.",
+            tok_tax: "Налог", tok_tax_desc: "0% налог. Чистая утилита.",
+            ca_label: "АДРЕС КОНТРАКТА:", ca_note: "*Копируйте только отсюда.",
+            roadmap_title: "Дорожная Карта",
+            phase1_tag: "Q4 2025 (Сейчас)", phase1_title: "Фаза 1: Старт",
+            p1_1: "Концепт и Whitepaper", p1_2: "Создание сайта",
+            p1_3: "Запуск на Pump.fun", p1_4: "Создание комьюнити",
+            phase2_tag: "Q1 2026", phase2_title: "Фаза 2: Утилита",
+            p2_1: "Интеграция в Vepay", p2_2: "Скидки холдерам", p2_3: "Листинг Raydium",
+            phase3_tag: "Q2 2026", phase3_title: "Фаза 3: Экспансия",
+            p3_1: "Глобальный маркетинг", p3_2: "CoinGecko & CMC", p3_3: "Цель 10,000 Холдеров",
+            footer_slogan: "Платежное решение Blockchain x Fiat.",
+            
+            // UPDATED FOOTER
+            footer_copy: "&copy; 2025 Mercy Pay Token.",
+            
+            footer_disclaimer: "Криптотрейдинг сопряжен с риском. DYOR."
+        }
+    };
+
+        function changeLanguage(lang) {
+            const data = translations[lang];
+            const elements = document.querySelectorAll('[data-i18n]');
+            
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (data[key]) {
+                    // Efek fade sederhana saat ganti bahasa
+                    element.style.opacity = '0';
+                    setTimeout(() => {
+                        element.innerHTML = data[key];
+                        element.style.opacity = '1';
+                    }, 200);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
