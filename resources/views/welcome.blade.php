@@ -328,38 +328,31 @@
     </footer>
 
     <script>
-        // --- LOGIKA DROPDOWN BAHASA ---
         function toggleLangMenu() {
             const menu = document.getElementById('langMenu');
             menu.classList.toggle('hidden');
         }
 
         function selectLang(lang, flagUrl, label) {
-            // Update Tombol Utama
             document.getElementById('currentFlag').src = flagUrl;
             document.getElementById('currentLangLabel').innerText = label;
             
-            // Sembunyikan Menu
             document.getElementById('langMenu').classList.add('hidden');
             
-            // Panggil Fungsi Terjemahan
             changeLanguage(lang);
         }
 
-        // Tutup menu jika klik di luar
         window.onclick = function(event) {
             if (!event.target.closest('#langBtn') && !event.target.closest('#langMenu')) {
                 document.getElementById('langMenu').classList.add('hidden');
             }
         }
 
-        // --- KAMUS 5 BAHASA (SUDAH DIPERBAIKI: SLOGAN BARU & FOOTER BERSIH) ---
     const translations = {
         id: {
             menu_about: "Tentang", menu_tokenomics: "Tokenomics", menu_roadmap: "Roadmap",
             btn_buy_nav: "Beli $MPAY",
             
-            // BAGIAN INI DIPERBARUI (SLOGAN)
             hero_badge: "Masa Depan Pembayaran Digital",
             
             hero_title_1: "Jembatan Pembayaran",
@@ -388,7 +381,6 @@
             p3_1: "Kampanye Marketing Global", p3_2: "Listing CoinGecko & CMC", p3_3: "Target 10.000 Holder",
             footer_slogan: "Solusi pembayaran Blockchain x Fiat.",
             
-            // BAGIAN INI DIPERBARUI (HAPUS PT VEPAY)
             footer_copy: "&copy; 2025 Mercy Pay Token.",
             
             footer_disclaimer: "Perdagangan aset kripto memiliki risiko tinggi. Lakukan riset mandiri (DYOR)."
@@ -397,7 +389,6 @@
             menu_about: "About", menu_tokenomics: "Tokenomics", menu_roadmap: "Roadmap",
             btn_buy_nav: "Buy $MPAY",
             
-            // UPDATED SLOGAN
             hero_badge: "The Future of Digital Payments",
             
             hero_title_1: "Payment Bridge",
@@ -426,7 +417,6 @@
             p3_1: "Global Marketing Campaign", p3_2: "CoinGecko & CMC Listing", p3_3: "Target 10,000 Holders",
             footer_slogan: "Blockchain x Fiat Payment Solution.",
             
-            // UPDATED FOOTER
             footer_copy: "&copy; 2025 Mercy Pay Token.",
             
             footer_disclaimer: "Crypto trading involves high risk. Do your own research (DYOR)."
@@ -435,7 +425,6 @@
             menu_about: "Sobre", menu_tokenomics: "Tokenomics", menu_roadmap: "Mapa Vial",
             btn_buy_nav: "Comprar $MPAY",
             
-            // UPDATED SLOGAN
             hero_badge: "El Futuro de los Pagos Digitales",
             
             hero_title_1: "Puente de Pagos",
@@ -464,7 +453,6 @@
             p3_1: "Marketing Global", p3_2: "CoinGecko & CMC", p3_3: "Objetivo 10,000 Holders",
             footer_slogan: "Solución de Pagos Blockchain x Fiat.",
             
-            // UPDATED FOOTER
             footer_copy: "&copy; 2025 Mercy Pay Token.",
             
             footer_disclaimer: "El comercio de cripto conlleva alto riesgo. DYOR."
@@ -473,7 +461,6 @@
             menu_about: "关于", menu_tokenomics: "代币经济", menu_roadmap: "路线图",
             btn_buy_nav: "购买 $MPAY",
             
-            // UPDATED SLOGAN
             hero_badge: "数字支付的未来",
             
             hero_title_1: "支付桥梁",
@@ -502,7 +489,6 @@
             p3_1: "全球营销活动", p3_2: "CoinGecko & CMC 上市", p3_3: "目标 10,000 持有者",
             footer_slogan: "区块链 x 法币支付解决方案。",
             
-            // UPDATED FOOTER
             footer_copy: "&copy; 2025 Mercy Pay Token.",
             
             footer_disclaimer: "加密货币交易风险极高。请自行研究 (DYOR)。"
@@ -511,7 +497,6 @@
             menu_about: "О нас", menu_tokenomics: "Токеномика", menu_roadmap: "План",
             btn_buy_nav: "Купить $MPAY",
             
-            // UPDATED SLOGAN
             hero_badge: "Будущее Цифровых Платежей",
             
             hero_title_1: "Платежный Мост",
@@ -540,7 +525,6 @@
             p3_1: "Глобальный маркетинг", p3_2: "CoinGecko & CMC", p3_3: "Цель 10,000 Холдеров",
             footer_slogan: "Платежное решение Blockchain x Fiat.",
             
-            // UPDATED FOOTER
             footer_copy: "&copy; 2025 Mercy Pay Token.",
             
             footer_disclaimer: "Криптотрейдинг сопряжен с риском. DYOR."
@@ -554,7 +538,6 @@
             elements.forEach(element => {
                 const key = element.getAttribute('data-i18n');
                 if (data[key]) {
-                    // Efek fade sederhana saat ganti bahasa
                     element.style.opacity = '0';
                     setTimeout(() => {
                         element.innerHTML = data[key];
